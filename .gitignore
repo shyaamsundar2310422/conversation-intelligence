@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+logs/*.jsonl
+
+# Model weights (do not push)
+models/**/pytorch_model.bin
+models/**/model.safetensors
+models/**/training_args.bin
+
+# OS / IDE
+.vscode/
+.DS_Store

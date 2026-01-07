@@ -1,0 +1,96 @@
+rules_version: 'v1.0.0'
+rules_owner: 'Conversation Intelligence Team'
+last_updated: '2026-01-02'
+description: 'Initial production rules for sentiment, intent, and priority correction'
+
+# ------------------------
+# Phrase-level vocab
+# ------------------------
+
+neutral_phrases:
+  - 'okay'
+  - 'fine'
+  - 'nothing special'
+  - 'not bad'
+  - 'could be better'
+  - 'average'
+  - 'so so'
+  - 'meh'
+
+outcome_phrases:
+  - 'came last'
+  - 'failed'
+  - 'lost the race'
+  - 'missed the chance'
+  - 'did not qualify'
+  - 'arrived late'
+  - 'was rejected'
+  - "didn't make it"
+
+sarcasm_phrases:
+  - 'thanks for nothing'
+  - 'great job'
+  - 'amazing service'
+  - 'love how'
+  - 'just perfect'
+  - 'wow'
+  - 'fantastic'
+  - 'impressive'
+  - 'exactly what i needed'
+
+# ------------------------
+# Decision rules
+# ------------------------
+
+rules:
+  # 1️⃣ Sad emotion but positive sentiment → Neutral
+  - name: sad_positive_conflict
+    if:
+      emotion_in: ['Sad', 'Disappointed']
+      sentiment: 'Positive'
+    then:
+      sentiment: 'Neutral'
+
+  # 2️⃣ Angry emotion should not stay Neutral
+  - name: angry_neutral_override
+    if:
+      emotion_in: ['Angry', 'Frustrated']
+      sentiment: 'Neutral'
+    then:
+      sentiment: 'Negative'
+
+  # 3️⃣ Appreciation + Negative sentiment = Complaint
+  - name: intent_sentiment_conflict
+    if:
+      intent: 'Appreciation'
+      sentiment: 'Negative'
+    then:
+      intent: 'Complaint'
+
+  # 4️⃣ Complaint + Neutral sentiment → Negative
+  - name: complaint_neutral_override
+    if:
+      intent: 'Complaint'
+      sentiment: 'Neutral'
+    then:
+      sentiment: 'Negative'
+
+  # 5️⃣ Sarcasm + Neutral/Positive sentiment → Negative
+  - name: sarcasm_override
+    if:
+      sentiment: 'Positive'
+      emotion_in: ['Angry', 'Sad', 'Frustrated']
+    then:
+      sentiment: 'Negative'
+  # 6️⃣ Outcome-based neutralization (loss without anger)
+  - name: outcome_sad_neutral
+    if:
+      emotion_in: ['Sad', 'Calm']
+    then:
+      sentiment: 'Neutral'
+  - name: sarcasm_intent_correction
+    if:
+      intent: Appreciation
+      sarcasm: true
+    then:
+      intent: Complaint
