@@ -3,14 +3,18 @@ __pycache__/
 *.pyc
 *.pyo
 
+# Virtual environments
+venv/
+.env
+
 # Logs
 logs/*.jsonl
 
-# Model weights (do not push)
+# Model weights (do not commit)
 models/**/pytorch_model.bin
 models/**/model.safetensors
 models/**/training_args.bin
 
-# OS / IDE
+# IDE / OS
 .vscode/
 .DS_Store
