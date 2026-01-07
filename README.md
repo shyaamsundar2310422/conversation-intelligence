@@ -25,7 +25,6 @@ The system is designed to be **deterministic, explainable, and auditable**, maki
 
 ---
 
-
 ## Architecture
 
 User Text
@@ -42,29 +41,29 @@ Confidence Reconciliation
 ↓
 Final Decision + Business Signals
 
-
-
 ---
 
-## Example
+Example
 
 ### Input
-```json
+
+json
 {
-  "text": "Amazing service — waited an hour for cold food."
+"text": "Amazing service — waited an hour for cold food."
 }
 
 ### OUTPUT
+
 {
-  "emotion": { "label": "Happy", "confidence": 0.79 },
-  "sentiment": {
-    "label": "Negative",
-    "confidence": 0.84,
-    "overridden": true
-  },
-  "intent": { "label": "Appreciation", "confidence": 0.96 },
-  "customer_state": "At Risk",
-  "rules_triggered": ["sarcasm_override"]
+"emotion": { "label": "Happy", "confidence": 0.79 },
+"sentiment": {
+"label": "Negative",
+"confidence": 0.84,
+"overridden": true
+},
+"intent": { "label": "Appreciation", "confidence": 0.96 },
+"customer_state": "At Risk",
+"rules_triggered": ["sarcasm_override"]
 }
 
 This demonstrates how surface emotion, true sentiment, and business risk can differ in a single message.
@@ -83,12 +82,11 @@ Project Structure
 ├── app.py
 ├── rules.yaml
 ├── models/
-│   ├── emotion_xlm_roberta_final/
-│   ├── sentiment_xlm_roberta_final/
-│   └── intent_xlm_roberta_final/
+│ ├── emotion_xlm_roberta_final/
+│ ├── sentiment_xlm_roberta_final/
+│ └── intent_xlm_roberta_final/
 ├── logs/
 └── test_logs.py
-
 
 Model weights are intentionally excluded to keep the repository lightweight and reproducible.
 
